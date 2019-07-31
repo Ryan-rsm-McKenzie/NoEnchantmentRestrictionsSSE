@@ -14,14 +14,15 @@ namespace
 		case SKSE::MessagingInterface::kDataLoaded:
 			{
 				auto dataHandler = RE::TESDataHandler::GetSingleton();
-				auto keywords = dataHandler->GetFormArray<RE::BGSKeyword>();
+				auto& keywords = dataHandler->GetFormArray<RE::BGSKeyword>();
 				auto factory = RE::IFormFactory::GetConcreteFormFactoryByType<RE::BGSListForm>();
 				auto list = factory->Create();
-				for (auto& keyword : keywords) {
-					list->forms.push_back(keyword);
+				list->forms.resize(keywords.size());
+				for (UInt32 i = 0; i < keywords.size(); ++i) {
+					list->forms[i] = keywords[i];
 				}
 
-				auto enchantments = dataHandler->GetFormArray<RE::EnchantmentItem>();
+				auto& enchantments = dataHandler->GetFormArray<RE::EnchantmentItem>();
 				for (auto& ench : enchantments) {
 					ench->data.wornRestrictions = list;
 				}
